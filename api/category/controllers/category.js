@@ -15,8 +15,8 @@ module.exports = {
   },
 
   find: async () => {
-    return await strapi.query("category").model.collection().fetch({
-      columns: ["id", "name"]
+    return await strapi.query("category").model.fetchAll({
+      withRelated: ["cover"]
     });
   }
 
