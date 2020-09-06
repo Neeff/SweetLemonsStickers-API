@@ -12,6 +12,7 @@
   "devDependencies": {},
   "dependencies": {
     "knex": "<0.20.0",
+    "ms": "^2.1.2",
     "pg": "latest",
     "strapi": "3.1.4",
     "strapi-admin": "3.1.4",
