@@ -8,6 +8,15 @@
         "policies": [],
         "prefix": ""
       }
+    },
+    {
+      "method": "POST",
+      "path": "/logout",
+      "handler": "Auth.logout",
+      "config": {
+        "policies": [],
+        "prefix": ""
+      }
     }
   ]
 }
