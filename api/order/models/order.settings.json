@@ -19,20 +19,11 @@
     "price": {
       "type": "biginteger"
     },
-    "user": {
-      "plugin": "users-permissions",
-      "model": "user",
-      "via": "orders"
-    },
     "finish": {
       "type": "string"
     },
     "size": {
       "type": "string"
-    },
-    "payment": {
-      "via": "orders",
-      "model": "payment"
     }
   }
 }

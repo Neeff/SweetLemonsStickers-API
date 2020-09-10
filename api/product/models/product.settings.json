@@ -40,6 +40,9 @@
       "collection": "category",
       "via": "products",
       "dominant": true
+    },
+    "weight": {
+      "type": "decimal"
     }
   }
 }

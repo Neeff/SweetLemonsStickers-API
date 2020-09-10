@@ -5,4 +5,22 @@
  * to customize this controller
  */
 
-module.exports = {};
+module.exports = {
+
+    init: async (ctx) => {
+        const { shoppingCart } = ctx.request.body;
+        ctx.send({ shoppingCart });
+    },
+
+    response: async (ctx) => {
+        ctx.send({
+            status: "here"
+        })
+
+    },
+
+    finish: async (ctx) => {
+
+    }
+
+};

@@ -9,27 +9,13 @@
     "timestamps": true
   },
   "attributes": {
-    "user": {
-      "plugin": "users-permissions",
-      "model": "user",
-      "via": "payments"
-    },
-    "amount": {
-      "type": "biginteger"
-    },
     "description": {
       "type": "text"
     },
     "pay_date": {
       "type": "datetime"
     },
-    "verified": {
-      "type": "boolean"
-    },
     "payment_method": {
-      "type": "string"
-    },
-    "observation": {
       "type": "string"
     },
     "response_code": {
@@ -38,12 +24,16 @@
     "buy_order": {
       "type": "string"
     },
-    "last_numbers": {
-      "type": "string"
+    "verified": {
+      "type": "boolean"
     },
-    "orders": {
-      "collection": "order",
-      "via": "payment"
+    "amount": {
+      "type": "biginteger"
+    },
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "payments"
     }
   }
 }

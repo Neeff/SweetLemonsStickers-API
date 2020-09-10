@@ -47,6 +47,30 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "POST",
+      "path": "/payments/init",
+      "handler": "payment.init",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments/response",
+      "handler": "payment.response",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments/finish",
+      "handler": "payment.finish",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }
