@@ -24,6 +24,22 @@
     },
     "size": {
       "type": "string"
+    },
+    "payment": {
+      "model": "payment",
+      "via": "orders"
+    },
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "orders"
+    },
+    "product": {
+      "model": "product",
+      "via": "orders"
+    },
+    "buy_order": {
+      "type": "string"
     }
   }
 }

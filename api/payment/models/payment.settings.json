@@ -9,9 +9,6 @@
     "timestamps": true
   },
   "attributes": {
-    "description": {
-      "type": "text"
-    },
     "pay_date": {
       "type": "datetime"
     },
@@ -19,13 +16,15 @@
       "type": "string"
     },
     "response_code": {
-      "type": "string"
+      "type": "string",
+      "private": true
     },
     "buy_order": {
       "type": "string"
     },
     "verified": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "amount": {
       "type": "biginteger"
@@ -34,6 +33,25 @@
       "plugin": "users-permissions",
       "model": "user",
       "via": "payments"
+    },
+    "orders": {
+      "via": "payment",
+      "collection": "order"
+    },
+    "authorization_code": {
+      "type": "string",
+      "private": true
+    },
+    "commerce_code": {
+      "type": "string",
+      "private": true
+    },
+    "vci": {
+      "type": "string",
+      "private": true
+    },
+    "card_number": {
+      "type": "string"
     }
   }
 }

@@ -18,5 +18,37 @@ module.exports = {
             .getNormalTransaction();
         return transaction;
 
+    },
+
+    createPayment: async (userId, orderIds, buyOrder, amount) => {
+        const payment = await strapi.query('payment').create({
+            user: userId,
+            orders: orderIds,
+            amount: amount,
+            buy_order: buyOrder
+        });
+        return payment;
+
+    },
+
+    updatePayment: async (response) => {
+        const { buyOrder, cardDetail, detailOutput, transactionDate, VCI } = response;
+        const { responseCode, paymentTypeCode, authorizationCode, commerceCode } = detailOutput[0];
+        const payment = await strapi.query('payment').update({
+            buy_order: buyOrder
+        }, {
+            verified: true,
+            response_code: responseCode,
+            pay_date: transactionDate,
+            payment_method: paymentTypeCode,
+            authorization_code: authorizationCode,
+            commerce_code: commerceCode,
+            vci: VCI,
+            card_number: cardDetail.cardNumber
+
+        });
+
+        return payment;
+
     }
 };

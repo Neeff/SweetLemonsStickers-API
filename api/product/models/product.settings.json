@@ -43,6 +43,10 @@
     },
     "weight": {
       "type": "decimal"
+    },
+    "orders": {
+      "via": "product",
+      "collection": "order"
     }
   }
 }
