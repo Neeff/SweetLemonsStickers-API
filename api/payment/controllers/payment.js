@@ -16,7 +16,7 @@ module.exports = {
                 const { token, url } = response
                 // instancia y alamacena los elementos del carrito de compra que el usuario comprara
                 const orderIds = await strapi.services.order.insertOrders(shoppingCart, id, buyOrder);
-                await strapi.services.payment.createPayment(id, orderIds, buyOrder, amount);
+                await strapi.services.payment.createPayment(id, orderIds, buyOrder, amount, token);
                 ctx.send({
                     token,
                     url
@@ -48,6 +48,8 @@ module.exports = {
                 }
             } else {
                 //destuir la instancia de payment y junto con ella las ordenes asociadas
+                ctx.status = 307;
+                ctx.redirect(urlRedirection);
 
             }
             console.log(transactionResult);
@@ -59,40 +61,49 @@ module.exports = {
 
     finish: async (ctx) => {
         let status = null;
+        let error = null;
+        let payment = null;
         const { TBK_TOKEN, TBK_ID_SESION, TBK_ORDEN_COMPRA, token_ws } = ctx.request.body;
-        const transaction = strapi.services.payment.Webpay();
-
-        if (TBK_TOKEN !== undefined) {
+        console.log(ctx.request.body);
+        if (TBK_TOKEN !== undefined && TBK_ID_SESION !== undefined && TBK_ORDEN_COMPRA !== undefined) {
             status = 'ABORTED';
+            error = 'You canceled the payment, do you want to try again?';
+
         }
+        if (TBK_TOKEN === undefined && TBK_ID_SESION !== undefined && TBK_ORDEN_COMPRA !== undefined) {
+            status = 'more than ten minutes passed, transaction rejected';
+        }
+        if (TBK_TOKEN !== undefined && token_ws !== undefined) {
+            status = 'Payment Not Authorized';
+            error = 'The page where payment is processing was closed try again'
+        }
+
         if (token_ws !== undefined) {
-            const transactionResult = await transaction.getTransactionResult(token_ws);
-            const { responseCode } = transactionResult.detailOutput[0];
-            console.log(transactionResult);
-            if (responseCode === 0) {
-                status = 'AUTHORIZE';
+            const isVerified = await strapi.services.payment.isVerified(token_ws);
+            if (isVerified) {
+                status = "Authorized";
+                payment = await strapi.services.payment.returnByToken(token_ws);
             } else {
-                status = 'REJECTED';
+                status = 'Rejected';
+                error = "Payment Unprocessable"
             }
         }
+
         if (status === null) {
             ctx.status = 307
             ctx.redirect('') // redireccionar a la url 404 del front
             ctx.body = { error: 'Page Not Found' }
         }
-        if (TBK_TOKEN === undefined && TBK_ID_SESION !== undefined, TBK_ORDEN_COMPRA !== undefined) {
-            status = 'more than ten minutes passed, transaction rejected';
-        }
-        if (TBK_TOKEN !== undefined && token_ws !== undefined) {
-            status = 'Payment ABORTED';
-        }
+
         //ctx.status = 307;
         //ctx.redirect('');//redireccionar a la url que muestra el estado del pago en el front
         //ctx.body = {
         //status
         //};
         ctx.send({
-            status
+            status,
+            payment,
+            error
         });
     },
 

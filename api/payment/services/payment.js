@@ -2,7 +2,7 @@
 const Transbank = require('transbank-sdk');
 
 module.exports = {
-    createUUID: (ctx) => {
+    createUUID: () => {
         let dt = new Date().getTime();
         let uuid = 'xxxxx-xxxx-4xxx-yxxx-xxxxx'.replace(/[xy]/g, c => {
             let r = (dt + Math.random() * 16) % 16 | 0;
@@ -20,12 +20,13 @@ module.exports = {
 
     },
 
-    createPayment: async (userId, orderIds, buyOrder, amount) => {
+    createPayment: async (userId, orderIds, buyOrder, amount, tbkToken) => {
         const payment = await strapi.query('payment').create({
             user: userId,
             orders: orderIds,
             amount: amount,
-            buy_order: buyOrder
+            buy_order: buyOrder,
+            tbk_token: tbkToken
         });
         return payment;
 
@@ -44,11 +45,24 @@ module.exports = {
             authorization_code: authorizationCode,
             commerce_code: commerceCode,
             vci: VCI,
-            card_number: cardDetail.cardNumber
-
+            card_number: cardDetail.cardNumber,
         });
-
         return payment;
+    },
+    isVerified: async (tbkToken) => {
+        const payment = await strapi.query('payment').model.where('tbk_token', tbkToken).fetch();
+        const { verified } = payment.attributes
+        if (verified === null) return false;
+        if (verified === false) return false;
+        if (verified === true) return true;
+    },
+
+    returnByToken: async (tbkToken) => {
+        const payment = await strapi.query('payment').model.where('tbk_token', tbkToken).fetch({
+            columns: ['pay_date', 'buy_order', 'amount']
+        });
+        return payment;
+
 
     }
 };

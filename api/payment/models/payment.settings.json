@@ -35,8 +35,8 @@
       "via": "payments"
     },
     "orders": {
-      "via": "payment",
-      "collection": "order"
+      "collection": "order",
+      "via": "payment"
     },
     "authorization_code": {
       "type": "string",
@@ -51,6 +51,9 @@
       "private": true
     },
     "card_number": {
+      "type": "string"
+    },
+    "tbk_token": {
       "type": "string"
     }
   }

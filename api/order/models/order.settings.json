@@ -26,8 +26,8 @@
       "type": "string"
     },
     "payment": {
-      "model": "payment",
-      "via": "orders"
+      "via": "orders",
+      "model": "payment"
     },
     "user": {
       "plugin": "users-permissions",
