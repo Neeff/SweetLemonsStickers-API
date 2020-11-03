@@ -1,6 +1,9 @@
 {
   "kind": "collectionType",
   "collectionName": "payments",
+  "dependents": [
+    "orders"
+  ],
   "info": {
     "name": "payment"
   },

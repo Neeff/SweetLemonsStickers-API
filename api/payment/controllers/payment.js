@@ -48,11 +48,11 @@ module.exports = {
                 }
             } else {
                 //destuir la instancia de payment y junto con ella las ordenes asociadas
+                strapi.services.payment.updatePayment(transactionResult);
                 ctx.status = 307;
                 ctx.redirect(urlRedirection);
 
             }
-            console.log(transactionResult);
 
         } catch (error) {
             console.log(error);
@@ -66,12 +66,15 @@ module.exports = {
         const { TBK_TOKEN, TBK_ID_SESION, TBK_ORDEN_COMPRA, token_ws } = ctx.request.body;
         console.log(ctx.request.body);
         if (TBK_TOKEN !== undefined && TBK_ID_SESION !== undefined && TBK_ORDEN_COMPRA !== undefined) {
-            status = 'ABORTED';
+            status = 'Aborted';
             error = 'You canceled the payment, do you want to try again?';
+            strapi.services.payment.deletePaymentNotVerified(TBK_TOKEN, TBK_ORDEN_COMPRA);
 
         }
         if (TBK_TOKEN === undefined && TBK_ID_SESION !== undefined && TBK_ORDEN_COMPRA !== undefined) {
-            status = 'more than ten minutes passed, transaction rejected';
+            status = 'Rejected'
+            erro = 'More than ten minutes passed, transaction rejected';
+            strapi.services.payment.deletePaymentNotVerified(TBK_TOKEN, TBK_ORDEN_COMPRA);
         }
         if (TBK_TOKEN !== undefined && token_ws !== undefined) {
             status = 'Payment Not Authorized';

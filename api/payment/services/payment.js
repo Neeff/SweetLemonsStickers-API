@@ -64,5 +64,16 @@ module.exports = {
         return payment;
 
 
+    },
+    // usar esta funcion para eliminar en cascada el pago y las ordenes cuando el pago
+    // no fue verificado.
+    // debe de buscar por tbk_token y token_ws modificar los parametros que entran.
+    // y acorde a ello devolver el elemento y destruirlo.
+    deletePaymentNotVerified: async (token, buyOrder) => {
+        if (token === undefined) {
+            return await strapi.query('payment').model.where('buy_order', buyOrder).destroy();
+        } else {
+            return await strapi.query('payment').model.where('tbk_token', token).destroy();
+        }
     }
 };
