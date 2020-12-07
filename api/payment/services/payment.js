@@ -38,7 +38,7 @@ module.exports = {
         const payment = await strapi.query('payment').update({
             buy_order: buyOrder
         }, {
-            verified: true,
+            verified: responseCode === 0 ? true : false,
             response_code: responseCode,
             pay_date: transactionDate,
             payment_method: paymentTypeCode,
@@ -49,6 +49,7 @@ module.exports = {
         });
         return payment;
     },
+
     isVerified: async (tbkToken) => {
         const payment = await strapi.query('payment').model.where('tbk_token', tbkToken).fetch();
         const { verified } = payment.attributes

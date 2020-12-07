@@ -7,8 +7,8 @@ module.exports = {
         const { shoppingCart, amount } = ctx.request.body;
         const sessionId = id;
         const buyOrder = strapi.services.payment.createUUID();
-        const returnUrl = 'http://localhost:1337/payments/response';
-        const finalUrl = 'http://localhost:1337/payments/finish';
+        const returnUrl = strapi.config.get('server.return_url');
+        const finalUrl = strapi.config.get('server.final_url');
         const transaction = strapi.services.payment.Webpay();
         try {
             const response = await transaction.initTransaction(amount, buyOrder, sessionId, returnUrl, finalUrl);
@@ -64,7 +64,6 @@ module.exports = {
         let error = null;
         let payment = null;
         const { TBK_TOKEN, TBK_ID_SESION, TBK_ORDEN_COMPRA, token_ws } = ctx.request.body;
-        console.log(ctx.request.body);
         if (TBK_TOKEN !== undefined && TBK_ID_SESION !== undefined && TBK_ORDEN_COMPRA !== undefined) {
             status = 'Aborted';
             error = 'You canceled the payment, do you want to try again?';
@@ -89,6 +88,7 @@ module.exports = {
             } else {
                 status = 'Rejected';
                 error = "Payment Unprocessable"
+                strapi.services.payment.deletePaymentNotVerified(token_ws);
             }
         }
 
